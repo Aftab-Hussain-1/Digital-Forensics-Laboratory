@@ -1,0 +1,483 @@
+{
+  "investigators": [
+    {
+      "id": "inv-1",
+      "employeeCode": "DFL-EMP-01",
+      "fullName": "Tariq Mahmood",
+      "roleTitle": "Laboratory Director / Manager",
+      "division": "Laboratory Leadership",
+      "certifications": [
+        "CISSP",
+        "ISO/IEC 27001 Lead Implementer"
+      ],
+      "email": "t.mahmood@dfl-lab.org",
+      "status": "Active",
+      "clearanceLevel": "Level 3 — Director"
+    },
+    {
+      "id": "inv-2",
+      "employeeCode": "DFL-EMP-02",
+      "fullName": "Ayesha Siddiqui",
+      "roleTitle": "Senior Digital Forensic Examiner",
+      "division": "Computer Forensics",
+      "certifications": [
+        "GCFA",
+        "EnCE",
+        "CHFI"
+      ],
+      "email": "a.siddiqui@dfl-lab.org",
+      "status": "Active",
+      "clearanceLevel": "Level 3 — Lead Examiner"
+    },
+    {
+      "id": "inv-3",
+      "employeeCode": "DFL-EMP-03",
+      "fullName": "Bilal Qureshi",
+      "roleTitle": "Digital Forensic Examiner",
+      "division": "Mobile Forensics",
+      "certifications": [
+        "CCO",
+        "CCPA",
+        "DFCP"
+      ],
+      "email": "b.qureshi@dfl-lab.org",
+      "status": "On Assignment",
+      "clearanceLevel": "Level 2 — Examiner"
+    },
+    {
+      "id": "inv-4",
+      "employeeCode": "DFL-EMP-04",
+      "fullName": "Sanaullah Khan",
+      "roleTitle": "Digital Forensic Examiner",
+      "division": "Network Forensics",
+      "certifications": [
+        "GNFA",
+        "WCNA"
+      ],
+      "email": "s.khan@dfl-lab.org",
+      "status": "Active",
+      "clearanceLevel": "Level 2 — Examiner"
+    },
+    {
+      "id": "inv-5",
+      "employeeCode": "DFL-EMP-05",
+      "fullName": "Hina Farooq",
+      "roleTitle": "Evidence Custodian",
+      "division": "Digital Evidence Management",
+      "certifications": [
+        "CDEM",
+        "ISO/IEC 27037 Practitioner"
+      ],
+      "email": "h.farooq@dfl-lab.org",
+      "status": "Active",
+      "clearanceLevel": "Level 3 — Vault Custodian"
+    },
+    {
+      "id": "inv-6",
+      "employeeCode": "DFL-EMP-06",
+      "fullName": "Usman Raza",
+      "roleTitle": "IT / System Administrator",
+      "division": "Quality & Administration",
+      "certifications": [
+        "MCSE",
+        "Security+"
+      ],
+      "email": "u.raza@dfl-lab.org",
+      "status": "Active",
+      "clearanceLevel": "Level 2 — Systems"
+    },
+    {
+      "id": "inv-7",
+      "employeeCode": "DFL-EMP-07",
+      "fullName": "Dr. Nadia Javed",
+      "roleTitle": "Quality Assurance Officer",
+      "division": "Quality & Administration",
+      "certifications": [
+        "ISO/IEC 17025 Lead Assessor",
+        "CQA"
+      ],
+      "email": "n.javed@dfl-lab.org",
+      "status": "Review Duty",
+      "clearanceLevel": "Level 3 — QA Audit"
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-1",
+      "caseNumber": "DFL-2026-001",
+      "title": "Workstation Unauthorized Exfiltration Review",
+      "requestingParty": "Internal Audit & Legal Counsel",
+      "authorizationRef": "AUTH-IA-2026-041",
+      "division": "Computer Forensics",
+      "priority": "High",
+      "status": "In Examination",
+      "leadExaminerId": "inv-2",
+      "leadExaminerName": "Ayesha Siddiqui",
+      "openedAt": "2026-11-04T09:15:00Z",
+      "updatedAt": "2026-11-15T14:20:00Z",
+      "summary": "Acquisition and timeline analysis of Finance workstation NVMe SSD and volatile memory dump following suspected unauthorized USB mass storage transfer.",
+      "completedPolicySteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "case-2",
+      "caseNumber": "DFL-2026-002",
+      "title": "Perimeter Firewall Anomaly & PCAP Correlation",
+      "requestingParty": "Enterprise Security Operations",
+      "authorizationRef": "AUTH-SOC-2026-118",
+      "division": "Network Forensics",
+      "priority": "Urgent",
+      "status": "Peer Review",
+      "leadExaminerId": "inv-4",
+      "leadExaminerName": "Sanaullah Khan",
+      "openedAt": "2026-11-08T11:30:00Z",
+      "updatedAt": "2026-11-16T06:40:00Z",
+      "summary": "Reconstruction of outbound TLS beacons and correlation of firewall syslog exports against 48-hour packet capture archive.",
+      "completedPolicySteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "id": "case-3",
+      "caseNumber": "DFL-2026-003",
+      "title": "Executive Corporate Handset Backup Extraction",
+      "requestingParty": "External Corporate Client (NDA-09)",
+      "authorizationRef": "AUTH-EXT-2026-019",
+      "division": "Mobile Forensics",
+      "priority": "Standard",
+      "status": "Intake",
+      "leadExaminerId": "inv-3",
+      "leadExaminerName": "Bilal Qureshi",
+      "openedAt": "2026-11-14T10:05:00Z",
+      "updatedAt": "2026-11-14T15:10:00Z",
+      "summary": "Authorized logical backup acquisition and SQLite messaging database inspection with documented extraction scope limitations.",
+      "completedPolicySteps": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": "case-4",
+      "caseNumber": "DFL-2026-004",
+      "title": "Legacy Server Decommission Media Verification",
+      "requestingParty": "IT Governance & Compliance",
+      "authorizationRef": "AUTH-ITG-2026-007",
+      "division": "Digital Evidence Management",
+      "priority": "Standard",
+      "status": "Closed",
+      "leadExaminerId": "inv-5",
+      "leadExaminerName": "Hina Farooq",
+      "openedAt": "2026-10-20T08:45:00Z",
+      "updatedAt": "2026-11-02T16:50:00Z",
+      "summary": "Baseline cryptographic imaging, archive sealing, and verified custody transfer of decommissioned accounting database drives.",
+      "completedPolicySteps": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evd-1",
+      "evidenceCode": "EVD-2026-001",
+      "caseId": "case-1",
+      "caseNumber": "DFL-2026-001",
+      "description": "Samsung 980 PRO 1TB NVMe M.2 SSD (Finance WS-14)",
+      "mediaType": "NVMe SSD",
+      "serialNumber": "S69ENX0T841922K",
+      "receivedCondition": "Intact label, no physical damage, powered off prior to seizure",
+      "sourceOwner": "Finance Dept — WS-FIN-014",
+      "receivingOfficer": "Hina Farooq",
+      "receivedAt": "2026-11-04T09:40:00Z",
+      "acquisitionMethod": "Hardware Write-Blocker (TT-WB-NVME) + FTK Imager E01",
+      "forensicCopyId": "IMG-2026-001-A",
+      "storageLocation": "Vault Cabinet A · Shelf 2 · Bag #TE-88412",
+      "currentCustodian": "Hina Farooq (Vault)",
+      "baselineSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lastVerifiedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lastVerifiedAt": "2026-11-15T11:05:00Z",
+      "integrityStatus": "Verified Match",
+      "verificationCount": 2
+    },
+    {
+      "id": "evd-2",
+      "evidenceCode": "EVD-2026-002",
+      "caseId": "case-1",
+      "caseNumber": "DFL-2026-001",
+      "description": "64GB Volatile Memory Dump (WS-FIN-014 RAM)",
+      "mediaType": "Memory Image (.raw)",
+      "serialNumber": "MEM-WS-FIN-014-261104",
+      "receivedCondition": "Live logical RAM capture via signed acquisition utility",
+      "sourceOwner": "Finance Dept — WS-FIN-014",
+      "receivingOfficer": "Ayesha Siddiqui",
+      "receivedAt": "2026-11-04T10:15:00Z",
+      "acquisitionMethod": "Volatility-compatible RAW memory capture onto encrypted SSD",
+      "forensicCopyId": "IMG-2026-001-RAM",
+      "storageLocation": "Evidence Storage Server · Volume /cases/DFL-2026-001/",
+      "currentCustodian": "Ayesha Siddiqui",
+      "baselineSha256": "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
+      "lastVerifiedSha256": "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4",
+      "lastVerifiedAt": "2026-11-12T09:30:00Z",
+      "integrityStatus": "Verified Match",
+      "verificationCount": 1
+    },
+    {
+      "id": "evd-3",
+      "evidenceCode": "EVD-2026-003",
+      "caseId": "case-2",
+      "caseNumber": "DFL-2026-002",
+      "description": "48-Hour Core Switch SPAN PCAP Archive",
+      "mediaType": "PCAP / Network Log",
+      "serialNumber": "NET-SPAN-261107",
+      "receivedCondition": "Read-only exported capture stored on encrypted transfer drive",
+      "sourceOwner": "SOC Core Firewall Tap",
+      "receivingOfficer": "Sanaullah Khan",
+      "receivedAt": "2026-11-08T12:00:00Z",
+      "acquisitionMethod": "Wireshark / Dumpcap segmented capture + SHA-256 manifest",
+      "forensicCopyId": "PCAP-2026-002-W01",
+      "storageLocation": "Secure NAS · /network-forensics/DFL-2026-002/",
+      "currentCustodian": "Dr. Nadia Javed (QA Review)",
+      "baselineSha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "lastVerifiedSha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "lastVerifiedAt": "2026-11-16T06:20:00Z",
+      "integrityStatus": "Verified Match",
+      "verificationCount": 2
+    },
+    {
+      "id": "evd-4",
+      "evidenceCode": "EVD-2026-004",
+      "caseId": "case-3",
+      "caseNumber": "DFL-2026-003",
+      "description": "Corporate Smartphone (256GB, Airplane Mode Sealed)",
+      "mediaType": "Mobile Handset",
+      "serialNumber": "IMEI-358910094418271",
+      "receivedCondition": "Screen intact, battery at 72%, placed in RF-shielded Faraday pouch",
+      "sourceOwner": "Client Executive #04",
+      "receivingOfficer": "Hina Farooq",
+      "receivedAt": "2026-11-14T10:30:00Z",
+      "acquisitionMethod": "Pending Authorized Logical Backup Extraction",
+      "forensicCopyId": "Pending Acquisition",
+      "storageLocation": "Vault Cabinet B · RF Pouch #RF-109",
+      "currentCustodian": "Hina Farooq (Vault)",
+      "baselineSha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+      "lastVerifiedSha256": null,
+      "lastVerifiedAt": null,
+      "integrityStatus": "Pending Verification",
+      "verificationCount": 0
+    },
+    {
+      "id": "evd-5",
+      "evidenceCode": "EVD-2026-005",
+      "caseId": "case-4",
+      "caseNumber": "DFL-2026-004",
+      "description": "Legacy Accounting Server RAID-1 Mirror Drive #1 (4TB SATA)",
+      "mediaType": "SATA Enterprise HDD",
+      "serialNumber": "WD-WMC1T0928311",
+      "receivedCondition": "Clean chassis pull, sealed in anti-static tamper bag #TE-77201",
+      "sourceOwner": "IT Infrastructure — Server Room B",
+      "receivingOfficer": "Hina Farooq",
+      "receivedAt": "2026-10-20T09:10:00Z",
+      "acquisitionMethod": "Hardware SATA Write-Blocker + FTK Imager Raw DD",
+      "forensicCopyId": "IMG-2026-004-SRV",
+      "storageLocation": "Archive Vault C · Shelf 1 · Bag #TE-77201",
+      "currentCustodian": "Archive Vault C",
+      "baselineSha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "lastVerifiedSha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "lastVerifiedAt": "2026-11-02T16:15:00Z",
+      "integrityStatus": "Verified Match",
+      "verificationCount": 3
+    }
+  ],
+  "verifications": [
+    {
+      "id": "ver-1",
+      "evidenceId": "evd-1",
+      "evidenceCode": "EVD-2026-001",
+      "caseNumber": "DFL-2026-001",
+      "fileName": "IMG-2026-001-A.E01",
+      "fileSizeBytes": 1024189312,
+      "computedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matched": true,
+      "verifiedBy": "Ayesha Siddiqui",
+      "verifiedAt": "2026-11-15T11:05:00Z",
+      "notes": "Working forensic copy verified prior to Autopsy file-system timeline pass."
+    },
+    {
+      "id": "ver-2",
+      "evidenceId": "evd-3",
+      "evidenceCode": "EVD-2026-003",
+      "caseNumber": "DFL-2026-002",
+      "fileName": "SPAN-CORE-48H.pcapng",
+      "fileSizeBytes": 482910420,
+      "computedSha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "expectedSha256": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+      "matched": true,
+      "verifiedBy": "Dr. Nadia Javed",
+      "verifiedAt": "2026-11-16T06:20:00Z",
+      "notes": "QA peer review re-verification confirms intact PCAP capture archive."
+    }
+  ],
+  "custodyTransfers": [
+    {
+      "id": "coc-1",
+      "evidenceId": "evd-1",
+      "evidenceCode": "EVD-2026-001",
+      "caseNumber": "DFL-2026-001",
+      "transferredAt": "2026-11-04T09:40:00Z",
+      "fromHolder": "Internal Audit Representative (M. Saleem)",
+      "toHolder": "Hina Farooq (Evidence Custodian)",
+      "purpose": "Initial Evidence Intake & Sealing",
+      "sealNumber": "TE-88412",
+      "authorizedBy": "Tariq Mahmood",
+      "remarks": "Received in anti-static sleeve; photographed and logged into Vault Cabinet A."
+    },
+    {
+      "id": "coc-2",
+      "evidenceId": "evd-1",
+      "evidenceCode": "EVD-2026-001",
+      "caseNumber": "DFL-2026-001",
+      "transferredAt": "2026-11-04T11:20:00Z",
+      "fromHolder": "Hina Farooq (Vault Cabinet A)",
+      "toHolder": "Ayesha Siddiqui (Forensic Workstation 01)",
+      "purpose": "Write-Blocked Forensic Acquisition",
+      "sealNumber": "TE-88412",
+      "authorizedBy": "Tariq Mahmood",
+      "remarks": "Acquired image IMG-2026-001-A via TT-WB-NVME hardware write-blocker."
+    },
+    {
+      "id": "coc-3",
+      "evidenceId": "evd-1",
+      "evidenceCode": "EVD-2026-001",
+      "caseNumber": "DFL-2026-001",
+      "transferredAt": "2026-11-04T15:05:00Z",
+      "fromHolder": "Ayesha Siddiqui (Forensic Workstation 01)",
+      "toHolder": "Hina Farooq (Vault Cabinet A)",
+      "purpose": "Original Media Preservation Return",
+      "sealNumber": "TE-88413",
+      "authorizedBy": "Hina Farooq",
+      "remarks": "Original NVMe drive resealed in new tamper-evident bag; analysis continuing on working copy."
+    },
+    {
+      "id": "coc-4",
+      "evidenceId": "evd-3",
+      "evidenceCode": "EVD-2026-003",
+      "caseNumber": "DFL-2026-002",
+      "transferredAt": "2026-11-16T06:15:00Z",
+      "fromHolder": "Sanaullah Khan (Network Examiner)",
+      "toHolder": "Dr. Nadia Javed (QA Review)",
+      "purpose": "Independent Quality Assurance Review",
+      "sealNumber": "NAS-SEAL-202",
+      "authorizedBy": "Tariq Mahmood",
+      "remarks": "Transferred read-only NAS working share permissions for peer verification."
+    }
+  ],
+  "notes": [
+    {
+      "id": "note-1",
+      "caseId": "case-1",
+      "caseNumber": "DFL-2026-001",
+      "evidenceCode": "EVD-2026-001",
+      "examinerName": "Ayesha Siddiqui",
+      "toolUsed": "KAPE + Autopsy 4.21",
+      "createdAt": "2026-11-10T13:45:00Z",
+      "findingTitle": "USBSTOR Registry & LNK Artifact Correlation",
+      "content": "SYSTEM\\CurrentControlSet\\Enum\\USBSTOR entries indicate connection of SanDisk Ultra 128GB (Serial 4C5300011209) on 2026-11-02 at 17:42 PKT. Corresponding Windows ShellBag and .lnk files point to three archived financial spreadsheets copied to volume E:."
+    },
+    {
+      "id": "note-2",
+      "caseId": "case-1",
+      "caseNumber": "DFL-2026-001",
+      "evidenceCode": "EVD-2026-002",
+      "examinerName": "Ayesha Siddiqui",
+      "toolUsed": "Volatility 3",
+      "createdAt": "2026-11-12T16:10:00Z",
+      "findingTitle": "Volatile Process Tree & Active Handles",
+      "content": "pslist and filescan plugins confirm explorer.exe and robocopy.exe invocations matching the 17:42 PKT window. No unapproved remote access daemon or kernel rootkit signatures detected in RAM image."
+    },
+    {
+      "id": "note-3",
+      "caseId": "case-2",
+      "caseNumber": "DFL-2026-002",
+      "evidenceCode": "EVD-2026-003",
+      "examinerName": "Sanaullah Khan",
+      "toolUsed": "Wireshark 4.4",
+      "createdAt": "2026-11-15T18:05:00Z",
+      "findingTitle": "Periodic Outbound TLS Beacon Pattern",
+      "content": "Packet inspection isolated 300-second interval TLS ClientHello bursts from internal host 10.24.8.41 toward an uncategorized external endpoint. Correlated firewall logs confirm rule allow on port 443; remediation ticket issued to SOC."
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud-1",
+      "timestamp": "2026-11-04T09:15:00Z",
+      "actor": "Tariq Mahmood",
+      "action": "CASE_REGISTERED",
+      "targetType": "Case",
+      "targetId": "DFL-2026-001",
+      "details": "Authorized and registered Computer Forensics case DFL-2026-001 under AUTH-IA-2026-041."
+    },
+    {
+      "id": "aud-2",
+      "timestamp": "2026-11-04T09:40:00Z",
+      "actor": "Hina Farooq",
+      "action": "EVIDENCE_INTAKE",
+      "targetType": "Evidence",
+      "targetId": "EVD-2026-001",
+      "details": "Logged Samsung 980 PRO 1TB NVMe SSD with baseline SHA-256 seal TE-88412."
+    },
+    {
+      "id": "aud-3",
+      "timestamp": "2026-11-15T11:05:00Z",
+      "actor": "Ayesha Siddiqui",
+      "action": "SHA256_VERIFIED",
+      "targetType": "HashVerification",
+      "targetId": "EVD-2026-001",
+      "details": "SHA-256 verification MATCH confirmed for IMG-2026-001-A.E01."
+    },
+    {
+      "id": "aud-4",
+      "timestamp": "2026-11-16T06:20:00Z",
+      "actor": "Dr. Nadia Javed",
+      "action": "QA_HASH_AUDIT",
+      "targetType": "HashVerification",
+      "targetId": "EVD-2026-003",
+      "details": "Independent QA hash verification MATCH for PCAP archive EVD-2026-003."
+    }
+  ],
+  "proposalApproval": {
+    "status": "Pending Review",
+    "reviewedBy": "Executive Management Committee",
+    "reviewerRole": "Private Organization Leadership",
+    "reviewedAt": null,
+    "comments": "Awaiting management sign-off on 9,735,000 PKR initial capital allocation and 18-week phased commissioning schedule.",
+    "approvedBudgetPkr": 9735000
+  }
+}
