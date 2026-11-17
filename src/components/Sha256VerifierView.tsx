@@ -1,7 +1,12 @@
 import { CheckCircle2, Copy, Download, FileUp, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import type { LabStatePayload } from '../types/forensics';
-import { computeSha256FromFile, computeSha256FromText, formatBytes, formatDateTime } from '../utils/crypto';
+import {
+  computeDualHashesFromFile,
+  computeDualHashesFromText,
+  formatBytes,
+  formatDateTime,
+} from '../utils/crypto';
 
 interface Sha256VerifierViewProps {
   state: LabStatePayload;
@@ -11,6 +16,7 @@ interface Sha256VerifierViewProps {
     fileName: string;
     fileSizeBytes: number;
     computedSha256: string;
+    computedMd5?: string;
     verifiedBy: string;
     notes: string;
   }) => Promise<void>;
@@ -29,6 +35,7 @@ export function Sha256VerifierView({
   const [fileSizeBytes, setFileSizeBytes] = useState<number>(0);
   const [textPayload, setTextPayload] = useState<string>('');
   const [computedHash, setComputedHash] = useState<string>('');
+  const [computedMd5, setComputedMd5] = useState<string>('');
   const [computing, setComputing] = useState<boolean>(false);
   const [verifiedBy, setVerifiedBy] = useState<string>('Ayesha Siddiqui');
   const [notes, setNotes] = useState<string>('');
@@ -47,10 +54,11 @@ export function Sha256VerifierView({
     setComputing(true);
     setSavedBanner(null);
     try {
-      const hash = await computeSha256FromFile(file);
+      const { sha256, md5 } = await computeDualHashesFromFile(file);
       setFileName(file.name);
       setFileSizeBytes(file.size);
-      setComputedHash(hash);
+      setComputedHash(sha256);
+      setComputedMd5(md5);
     } finally {
       setComputing(false);
     }
@@ -61,14 +69,16 @@ export function Sha256VerifierView({
     setSavedBanner(null);
     if (!value) {
       setComputedHash('');
+      setComputedMd5('');
       setFileName('');
       setFileSizeBytes(0);
       return;
     }
-    const hash = await computeSha256FromText(value);
+    const { sha256, md5 } = await computeDualHashesFromText(value);
     setFileName('text-artifact-buffer.txt');
     setFileSizeBytes(new TextEncoder().encode(value).length);
-    setComputedHash(hash);
+    setComputedHash(sha256);
+    setComputedMd5(md5);
   };
 
   const handleDownloadSample = () => {
@@ -77,7 +87,7 @@ export function Sha256VerifierView({
       `Case Reference: ${selectedEvidence?.caseNumber || 'DFL-2026-001'}`,
       `Evidence Code: ${selectedEvidence?.evidenceCode || 'EVD-2026-001'}`,
       'Acquisition Tool: FTK Imager 4.7.1 (Hardware Write-Blocker Active)',
-      'Verification Standard: ISO/IEC 27037 SHA-256 Cryptographic Seal',
+      'Verification Standard: ISO/IEC 27037 SHA-256 + MD5 Cryptographic Seal',
     ].join('\n');
     const blob = new Blob([sampleContent], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -97,11 +107,12 @@ export function Sha256VerifierView({
         fileName: fileName || 'manual-verification',
         fileSizeBytes,
         computedSha256: computedHash,
+        computedMd5: computedMd5 || undefined,
         verifiedBy,
         notes:
           notes.trim() ||
           (isMatch
-            ? 'Client-side Web Crypto SHA-256 digest matches baseline evidence record.'
+            ? 'Client-side SHA-256 + MD5 digest matches baseline evidence record.'
             : 'ALERT: Computed SHA-256 digest does not match baseline intake record.'),
       });
       setNotes('');
@@ -116,10 +127,10 @@ export function Sha256VerifierView({
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between border-b border-slate-800 pb-5">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-slate-100">
-            SHA-256 Cryptographic File Verification
+            SHA-256 & MD5 Cryptographic Verification
           </h1>
           <p className="mt-1 text-xs text-slate-400">
-            Compute local SHA-256 digests in-browser via Web Crypto API and verify against registered evidence baselines.
+            Compute dual SHA-256 and MD5 digests locally in-browser and verify integrity against registered evidence baselines.
           </p>
         </div>
         <button
@@ -135,7 +146,7 @@ export function Sha256VerifierView({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-[#131a26] border border-slate-800 rounded-lg p-6 space-y-5">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-sm font-semibold text-slate-100">1. Compute Local SHA-256 Digest</h2>
+            <h2 className="text-sm font-semibold text-slate-100">1. Compute Local SHA-256 & MD5</h2>
             <div className="flex items-center gap-1 p-1 bg-[#0b0f17] border border-slate-800 rounded-lg">
               <button
                 type="button"
@@ -169,7 +180,7 @@ export function Sha256VerifierView({
             >
               <FileUp className="w-7 h-7 text-sky-400 mb-2" aria-hidden="true" />
               <p className="text-sm font-medium text-slate-100">
-                Select or drop any forensic file, log, or image
+                Select or drop any forensic file, disk image, or log
               </p>
               <p className="mt-1 text-xs text-slate-400">
                 Hashing executes locally in memory; raw bytes never leave your workstation.
@@ -189,37 +200,46 @@ export function Sha256VerifierView({
                 rows={5}
                 value={textPayload}
                 onChange={(e) => handleComputeText(e.target.value)}
-                placeholder="Paste text content to compute its exact UTF-8 SHA-256 digest..."
+                placeholder="Paste text content to compute SHA-256 and MD5 digests..."
                 className="w-full px-3 py-2 text-xs font-mono text-slate-100 bg-[#0b0f17] border border-slate-700 rounded-lg focus:outline-none focus:border-sky-500"
               />
             </div>
           )}
 
-          <div className="bg-[#0b0f17] border border-slate-800 rounded-lg p-4 space-y-2">
+          <div className="bg-[#0b0f17] border border-slate-800 rounded-lg p-4 space-y-3">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium text-slate-300">
-                {computing ? 'Computing SHA-256...' : 'Computed SHA-256 Output'}
+                {computing ? 'Computing SHA-256 + MD5...' : 'Computed Cryptographic Digests'}
               </span>
               {computedHash && (
                 <button
                   type="button"
                   onClick={async () => {
-                    await navigator.clipboard.writeText(computedHash);
+                    await navigator.clipboard.writeText(`SHA-256: ${computedHash}\nMD5: ${computedMd5}`);
                     setCopied(true);
                     setTimeout(() => setCopied(false), 1500);
                   }}
                   className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300"
                 >
                   <Copy className="w-3.5 h-3.5" aria-hidden="true" />
-                  <span>{copied ? 'Copied' : 'Copy digest'}</span>
+                  <span>{copied ? 'Copied' : 'Copy both'}</span>
                 </button>
               )}
             </div>
-            <p className="font-mono text-xs break-all text-emerald-400 min-h-[2rem]">
-              {computedHash || 'Awaiting file or text input...'}
-            </p>
+            <div>
+              <span className="text-[11px] font-mono text-slate-500 block">SHA-256</span>
+              <p className="font-mono text-xs break-all text-emerald-400">
+                {computedHash || 'Awaiting file or text input...'}
+              </p>
+            </div>
+            <div>
+              <span className="text-[11px] font-mono text-slate-500 block">MD5</span>
+              <p className="font-mono text-xs break-all text-sky-400">
+                {computedMd5 || '—'}
+              </p>
+            </div>
             {fileName && (
-              <p className="text-xs text-slate-400 tabular-nums">
+              <p className="text-xs text-slate-400 tabular-nums pt-1 border-t border-slate-800/80">
                 Artifact: <span className="font-mono text-slate-200">{fileName}</span> · {formatBytes(fileSizeBytes)}
               </p>
             )}
@@ -258,6 +278,14 @@ export function Sha256VerifierView({
               <p className="font-mono text-xs break-all text-sky-400">
                 {selectedEvidence.baselineSha256}
               </p>
+              {selectedEvidence.baselineMd5 && (
+                <>
+                  <p className="text-xs font-medium text-slate-400 pt-1">Stored Baseline MD5</p>
+                  <p className="font-mono text-xs break-all text-slate-300">
+                    {selectedEvidence.baselineMd5}
+                  </p>
+                </>
+              )}
             </div>
           )}
 
@@ -337,7 +365,7 @@ export function Sha256VerifierView({
       <div className="bg-[#131a26] border border-slate-800 rounded-lg overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-800">
           <h2 className="text-sm font-semibold text-slate-100">Evidence Hash Verification History</h2>
-          <p className="text-xs text-slate-400">Immutable ledger of cryptographic integrity checks</p>
+          <p className="text-xs text-slate-400">Immutable ledger of SHA-256 & MD5 integrity checks</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
@@ -346,7 +374,7 @@ export function Sha256VerifierView({
                 <th className="py-2.5 px-4">Timestamp</th>
                 <th className="py-2.5 px-4">Evidence / Case</th>
                 <th className="py-2.5 px-4">Artifact & Size</th>
-                <th className="py-2.5 px-4">Computed SHA-256</th>
+                <th className="py-2.5 px-4">Computed Digests</th>
                 <th className="py-2.5 px-4">Verdict</th>
                 <th className="py-2.5 px-4">Verified By</th>
               </tr>
@@ -366,8 +394,15 @@ export function Sha256VerifierView({
                     <p className="font-medium text-slate-100">{v.fileName}</p>
                     <p className="text-slate-400 tabular-nums">{formatBytes(v.fileSizeBytes)}</p>
                   </td>
-                  <td className="py-3 px-4 font-mono text-[11px] text-slate-300 max-w-[240px] truncate" title={v.computedSha256}>
-                    {v.computedSha256}
+                  <td className="py-3 px-4 font-mono text-[11px] max-w-[260px]">
+                    <p className="text-slate-300 truncate" title={v.computedSha256}>
+                      SHA256: {v.computedSha256}
+                    </p>
+                    {v.computedMd5 && (
+                      <p className="text-sky-400 truncate" title={v.computedMd5}>
+                        MD5: {v.computedMd5}
+                      </p>
+                    )}
                   </td>
                   <td className="py-3 px-4 whitespace-nowrap">
                     {v.matched ? (

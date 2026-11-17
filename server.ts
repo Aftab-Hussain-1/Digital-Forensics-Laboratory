@@ -152,6 +152,7 @@ async function startServer() {
       forensicCopyId,
       storageLocation,
       baselineSha256,
+      baselineMd5,
       sealNumber,
     } = req.body as Partial<EvidenceItem> & { sealNumber?: string };
 
@@ -196,6 +197,7 @@ async function startServer() {
       storageLocation: storageLocation?.trim() || `Vault Cabinet A · Bag #${seal}`,
       currentCustodian: `${officer} (Intake)`,
       baselineSha256: normalizedHash,
+      baselineMd5: baselineMd5?.trim().toLowerCase() || undefined,
       lastVerifiedSha256: null,
       lastVerifiedAt: null,
       integrityStatus: 'Pending Verification',
@@ -231,13 +233,14 @@ async function startServer() {
     res.status(201).json(state);
   });
 
-  // Log a SHA-256 verification result
+  // Log a SHA-256 & MD5 verification result
   app.post('/api/verifications', (req, res) => {
-    const { evidenceId, fileName, fileSizeBytes, computedSha256, verifiedBy, notes } = req.body as {
+    const { evidenceId, fileName, fileSizeBytes, computedSha256, computedMd5, verifiedBy, notes } = req.body as {
       evidenceId: string;
       fileName: string;
       fileSizeBytes: number;
       computedSha256: string;
+      computedMd5?: string;
       verifiedBy: string;
       notes?: string;
     };
@@ -266,6 +269,7 @@ async function startServer() {
       fileName: fileName || 'manual-digest-check',
       fileSizeBytes: Number(fileSizeBytes) || 0,
       computedSha256: cleanComputed,
+      computedMd5: computedMd5?.trim().toLowerCase() || undefined,
       expectedSha256: item.baselineSha256,
       matched,
       verifiedBy: verifiedBy?.trim() || 'Ayesha Siddiqui',

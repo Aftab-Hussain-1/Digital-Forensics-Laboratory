@@ -17,6 +17,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { CustodyView } from './components/CustodyView';
 import { DashboardView, type ActiveTab } from './components/DashboardView';
+import { DiskForensicsView } from './components/DiskForensicsView';
 import { EvidenceView } from './components/EvidenceView';
 import { ExaminersNotesView } from './components/ExaminersNotesView';
 import { ForensicAnalysisView } from './components/ForensicAnalysisView';
@@ -40,8 +41,9 @@ const LIMS_NAV: { id: ActiveTab; label: string; icon: typeof LayoutDashboard }[]
   { id: 'dashboard', label: 'Forensic Dashboard', icon: LayoutDashboard },
   { id: 'cases', label: 'Investigation Workspace', icon: FolderKanban },
   { id: 'evidence', label: 'Evidence Management', icon: HardDrive },
+  { id: 'disk', label: 'Disk Forensics (TSK)', icon: Server },
   { id: 'analysis', label: 'Forensic Analysis', icon: Cpu },
-  { id: 'verify', label: 'SHA-256 Verification', icon: ShieldCheck },
+  { id: 'verify', label: 'SHA-256 / MD5 Verifier', icon: ShieldCheck },
   { id: 'custody', label: 'Chain of Custody', icon: ArrowRightLeft },
   { id: 'examiners', label: 'Examiners & Notes', icon: Users },
   { id: 'reports', label: 'Reports & Audit', icon: FileCheck },
@@ -57,8 +59,9 @@ const BREADCRUMB_LABELS: Record<ActiveTab, string> = {
   dashboard: 'Forensics Platform / Dashboard',
   cases: 'Case Management / Investigation Workspace & Timeline',
   evidence: 'Evidence Management / Inventory & Inline Details',
+  disk: 'Phase 2 Engine / Disk Forensics (Autopsy & The Sleuth Kit)',
   analysis: 'Forensic Analysis / Network, Memory & Disk Dashboard',
-  verify: 'Integrity Assurance / SHA-256 File Verification',
+  verify: 'Integrity Assurance / SHA-256 & MD5 File Verification',
   custody: 'Evidence Management / Chain of Custody',
   examiners: 'Lab Management / Examiners & Notes',
   reports: 'Compliance / Printable Reports & Audit Log',
@@ -143,6 +146,7 @@ export default function App() {
     forensicCopyId: string;
     storageLocation: string;
     baselineSha256: string;
+    baselineMd5?: string;
     sealNumber: string;
   }) => {
     await apiPost('/api/evidence', payload);
@@ -153,6 +157,7 @@ export default function App() {
     fileName: string;
     fileSizeBytes: number;
     computedSha256: string;
+    computedMd5?: string;
     verifiedBy: string;
     notes: string;
   }) => {
@@ -433,6 +438,9 @@ export default function App() {
                     setActiveTab('verify');
                   }}
                 />
+              )}
+              {activeTab === 'disk' && (
+                <DiskForensicsView state={labState} onLogFindingToCase={handleAddNote} />
               )}
               {activeTab === 'analysis' && <ForensicAnalysisView />}
               {activeTab === 'verify' && (

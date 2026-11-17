@@ -44,6 +44,7 @@ export interface EvidenceItem {
   storageLocation: string;
   currentCustodian: string;
   baselineSha256: string;
+  baselineMd5?: string;
   lastVerifiedSha256: string | null;
   lastVerifiedAt: string | null;
   integrityStatus: IntegrityStatus;
@@ -58,6 +59,7 @@ export interface HashVerificationRecord {
   fileName: string;
   fileSizeBytes: number;
   computedSha256: string;
+  computedMd5?: string;
   expectedSha256: string;
   matched: boolean;
   verifiedBy: string;

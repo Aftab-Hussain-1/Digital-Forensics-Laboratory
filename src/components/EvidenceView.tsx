@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronRight, Copy, FileUp, Plus, Search, ShieldCheck } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import type { IntegrityStatus, LabStatePayload } from '../types/forensics';
-import { computeSha256FromFile, formatDateTime } from '../utils/crypto';
+import { computeDualHashesFromFile, formatDateTime } from '../utils/crypto';
 import { IntegrityStatusLabel } from './StatusText';
 
 interface EvidenceViewProps {
@@ -18,6 +18,7 @@ interface EvidenceViewProps {
     forensicCopyId: string;
     storageLocation: string;
     baselineSha256: string;
+    baselineMd5?: string;
     sealNumber: string;
   }) => Promise<void>;
   onVerifyEvidence: (evidenceId: string) => void;
@@ -50,6 +51,7 @@ export function EvidenceView({ state, onCreateEvidence, onVerifyEvidence }: Evid
     forensicCopyId: '',
     storageLocation: 'Vault Cabinet A · Shelf 3',
     baselineSha256: '',
+    baselineMd5: '',
     sealNumber: `TE-${Math.floor(89000 + Math.random() * 9000)}`,
   });
 
@@ -69,10 +71,11 @@ export function EvidenceView({ state, onCreateEvidence, onVerifyEvidence }: Evid
   const handleFileHashForIntake = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const digest = await computeSha256FromFile(file);
+    const { sha256, md5 } = await computeDualHashesFromFile(file);
     setForm((prev) => ({
       ...prev,
-      baselineSha256: digest,
+      baselineSha256: sha256,
+      baselineMd5: md5,
       description: prev.description || file.name,
     }));
   };
@@ -97,6 +100,7 @@ export function EvidenceView({ state, onCreateEvidence, onVerifyEvidence }: Evid
         sourceOwner: '',
         forensicCopyId: '',
         baselineSha256: '',
+        baselineMd5: '',
         sealNumber: `TE-${Math.floor(89000 + Math.random() * 9000)}`,
       }));
     } finally {
@@ -298,13 +302,25 @@ export function EvidenceView({ state, onCreateEvidence, onVerifyEvidence }: Evid
                                 </div>
                               </div>
 
-                              <div className="pt-2 border-t border-slate-800 space-y-1.5">
-                                <span className="text-[11px] font-medium text-slate-400 block">
-                                  Baseline SHA-256 Cryptographic Digest
-                                </span>
-                                <p className="font-mono text-xs break-all text-emerald-400 bg-[#0b0f17] border border-slate-800 rounded px-3 py-2">
-                                  {ev.baselineSha256}
-                                </p>
+                              <div className="pt-2 border-t border-slate-800 space-y-2">
+                                <div>
+                                  <span className="text-[11px] font-medium text-slate-400 block mb-1">
+                                    Baseline SHA-256 Cryptographic Digest
+                                  </span>
+                                  <p className="font-mono text-xs break-all text-emerald-400 bg-[#0b0f17] border border-slate-800 rounded px-3 py-2">
+                                    {ev.baselineSha256}
+                                  </p>
+                                </div>
+                                {ev.baselineMd5 && (
+                                  <div>
+                                    <span className="text-[11px] font-medium text-slate-400 block mb-1">
+                                      Baseline MD5 Digest
+                                    </span>
+                                    <p className="font-mono text-xs break-all text-sky-400 bg-[#0b0f17] border border-slate-800 rounded px-3 py-2">
+                                      {ev.baselineMd5}
+                                    </p>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </td>
@@ -455,26 +471,40 @@ export function EvidenceView({ state, onCreateEvidence, onVerifyEvidence }: Evid
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-medium text-slate-300">
-                    Baseline SHA-256 Digest (64 hex chars)
-                  </label>
-                  <label className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 cursor-pointer">
-                    <FileUp className="w-3.5 h-3.5" aria-hidden="true" />
-                    <span>Compute from local file</span>
-                    <input type="file" onChange={handleFileHashForIntake} className="sr-only" />
-                  </label>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-medium text-slate-300">
+                      Baseline SHA-256 Digest (64 hex chars)
+                    </label>
+                    <label className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 cursor-pointer">
+                      <FileUp className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Compute SHA-256 & MD5 from file</span>
+                      <input type="file" onChange={handleFileHashForIntake} className="sr-only" />
+                    </label>
+                  </div>
+                  <input
+                    required
+                    type="text"
+                    pattern="[a-fA-F0-9]{64}"
+                    value={form.baselineSha256}
+                    onChange={(e) => setForm({ ...form, baselineSha256: e.target.value })}
+                    placeholder="64-character hexadecimal SHA-256 digest"
+                    className="w-full px-3 py-2 text-xs font-mono text-emerald-400 bg-[#0b0f17] border border-slate-700 rounded-lg"
+                  />
                 </div>
-                <input
-                  required
-                  type="text"
-                  pattern="[a-fA-F0-9]{64}"
-                  value={form.baselineSha256}
-                  onChange={(e) => setForm({ ...form, baselineSha256: e.target.value })}
-                  placeholder="64-character hexadecimal SHA-256 digest"
-                  className="w-full px-3 py-2 text-xs font-mono text-emerald-400 bg-[#0b0f17] border border-slate-700 rounded-lg"
-                />
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                    Baseline MD5 Digest (optional, auto-filled on file upload)
+                  </label>
+                  <input
+                    type="text"
+                    value={form.baselineMd5}
+                    onChange={(e) => setForm({ ...form, baselineMd5: e.target.value })}
+                    placeholder="32-character hexadecimal MD5 digest"
+                    className="w-full px-3 py-2 text-xs font-mono text-sky-400 bg-[#0b0f17] border border-slate-700 rounded-lg"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">

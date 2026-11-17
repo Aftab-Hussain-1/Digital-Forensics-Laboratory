@@ -8,6 +8,7 @@ export type ActiveTab =
   | 'dashboard'
   | 'cases'
   | 'evidence'
+  | 'disk'
   | 'verify'
   | 'analysis'
   | 'custody'
@@ -107,11 +108,19 @@ export function DashboardView({
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             type="button"
+            onClick={() => onNavigate('disk')}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-200 bg-[#151c28] border border-slate-700 rounded-lg hover:bg-[#1c2536] transition-colors whitespace-nowrap shrink-0"
+          >
+            <HardDrive className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+            <span>Disk Forensics (TSK)</span>
+          </button>
+          <button
+            type="button"
             onClick={() => onNavigate('verify')}
             className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-slate-200 bg-[#151c28] border border-slate-700 rounded-lg hover:bg-[#1c2536] transition-colors whitespace-nowrap shrink-0"
           >
             <ShieldCheck className="w-4 h-4 text-sky-400" aria-hidden="true" />
-            <span>SHA-256 Verifier</span>
+            <span>SHA-256 / MD5 Verifier</span>
           </button>
           <button
             type="button"
